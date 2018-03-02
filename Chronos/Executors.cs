@@ -3,20 +3,20 @@ using System.Collections.Generic;
 
 namespace Chronos
 {
-    public class Executors
+    public static class Executors
     {
 
-        public static string GetPluginExecutor(string timeManager)
+        public static string GetPluginExecutor(string extension)
         {
-            Dictionary<string, string> executors = new Dictionary<string, string>(){
+            var executors = new Dictionary<string, string>(){
                 {".ps1", @"\WindowsPowerShell\v1.0\powershell.exe"},
                 {".vbs", @"\cscript.exe"},
-                {".wsf", @"C:\Windows\System32\WScript.exe"}
+                {".wsf", @"\WScript.exe"}
             };
 
             try
             {
-                return Environment.SystemDirectory + executors[timeManager];
+                return Environment.SystemDirectory + executors[extension];
             }
             catch (Exception)
             {
@@ -24,16 +24,18 @@ namespace Chronos
             }
         }
 
-        public static string GetIntialParameters(string timeManager)
+        public static string GetIntialParameters(string extension)
         {
-            Dictionary<string, string> intialParameters = new Dictionary<string, string>(){
+            // create possible initial parameters, depending on file extension
+            var intialParameters = new Dictionary<string, string>(){
                 {".ps1", @"-File "},
                 {".vbs", @"//NoLogo "},
             };
             
+            // return its corresponding 
             try
             {
-                return intialParameters[timeManager];
+                return intialParameters[extension];
             }
             catch (Exception)
             {

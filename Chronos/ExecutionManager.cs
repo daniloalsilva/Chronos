@@ -6,29 +6,7 @@ using System.IO;
 
 namespace Chronos
 {
-    class ExecutionResult {
-        public ExecutionResult(int exitCode, string resultContent)
-        {
-            this.exitCode = exitCode;
-            this.resultContent = resultContent;
-        }
-
-        private int exitCode;
-        public int ExitCode
-        {
-            get { return exitCode; }
-            set { exitCode = value; }
-        }
-
-        private string resultContent;
-        public string ResultContent
-        {
-            get { return resultContent; }
-            set { resultContent = value; }
-        }
-    }
-
-    class ExecutionManager
+    internal class ExecutionManager
     {
         public ExecutionManager() { }
 
@@ -106,11 +84,11 @@ namespace Chronos
                     // Diferenciando Scripts executados diretamente
                     ProcessStartInfo procStartInfo;
                     if (timeManager.PluginExecutor == String.Empty)
-                        procStartInfo = new ProcessStartInfo(Tools.FormatParams(timeManager.ScriptPath), timeManager.Parameters.Trim());
+                        procStartInfo = new ProcessStartInfo(Tools.FormatPath(timeManager.ScriptPath), timeManager.Parameters.Trim());
                     else
                         procStartInfo = new ProcessStartInfo(
-                            Tools.FormatParams(timeManager.PluginExecutor),
-                            timeManager.IntialParameters + Tools.FormatParams(timeManager.ScriptPath) + " " + timeManager.Parameters.Trim());
+                            Tools.FormatPath(timeManager.PluginExecutor),
+                            timeManager.IntialParameters + Tools.FormatPath(timeManager.ScriptPath) + " " + timeManager.Parameters.Trim());
 
                     /// Os comandos abaixo não necessários para redirecionar a saída dos Scripts
                     /// As mesmas serão redirecionadas para o StreamReader Process.StandardOutput
