@@ -6,7 +6,8 @@ namespace Chronos
 {
     class Tools
     {
-        public static void Help (){
+        public static void Help()
+        {
             Console.WriteLine(@"
  ┌─┐┬ ┬┬─┐┌─┐┌┐┌┌┬┐┌─┐
  │  ├─┤├┬┘│ ││││├┼┤└─┐
@@ -50,18 +51,22 @@ namespace Chronos
     Chronos.exe clearCache
 ");
         }
-        
-        public static void ClearCache() {
+
+        public static void ClearCache()
+        {
             string[] dir = Directory.GetFiles(Directory.GetCurrentDirectory() + @"\Cache\");
-            foreach (string item in dir){
-                var obj = item.Split(new char[]{'.'});
-                if (String.Equals(obj.Last(),"chronos")){
+            foreach (string item in dir)
+            {
+                var obj = item.Split(new char[] { '.' });
+                if (String.Equals(obj.Last(), "chronos"))
+                {
                     File.Delete(item);
                 }
             }
         }
 
-        public static bool ValidateParams(string[] args) {
+        public static bool ValidateParams(string[] args)
+        {
 
             if (args == null || args.Length == 1)
             {
@@ -70,11 +75,11 @@ namespace Chronos
                     try
                     {
                         ClearCache();
-                        Console.WriteLine(String.Format("Chronos Cache cleared."));
+                        Console.WriteLine("Chronos Cache cleared.");
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(String.Format("Something wrong. {0}", e.Message));
+                        Console.WriteLine($"Something wrong. {e.Message}");
                     }
                     return false;
                 }
@@ -82,13 +87,15 @@ namespace Chronos
                 return false;
             }
 
-            if (args.Length < 3){
+            if (args.Length < 3)
+            {
                 Help();
                 return false;
             }
 
-            if (!File.Exists(args[2].Replace("\"",""))) {
-                Console.WriteLine(String.Format("File {0} doesn't exists",args[2]));
+            if (!File.Exists(args[2].Replace("\"", "")))
+            {
+                Console.WriteLine($"File {args[2]} doesn't exists");
                 Help();
                 return false;
             }
@@ -105,40 +112,17 @@ namespace Chronos
             }
         }
 
-        public static string FormatParams(string x)
+        public static string FormatPath(string scriptPath)
         {
-            if (x.Contains(' '))
-                x = '"' + x + '"';
-            return x;
-        }
-        
-        public static string[] FormatParams(string[] x)
-        {
-            for (int i = 0; i < x.Length; i++)
-                if (x[i].Contains(' '))
-                    x[i] = '"' + x[i] + '"';
-            return x;
+            return scriptPath.Contains(' ') ? $"\"{scriptPath}\"" : scriptPath; 
         }
 
-        //public static string CollectHash(object obj) {
-            
-        //    string parameters = "";
-
-        //    Type myType = obj.GetType();
-        //    IList<PropertyInfo> props = new List<PropertyInfo>(myType.GetProperties());
-
-        //    foreach (PropertyInfo prop in props)
-        //    {
-        //        object propValue = prop.GetValue(obj, null);
-        //        if (propValue != null)
-        //        {
-        //            parameters += propValue;
-        //        }
-        //    }
-
-        //    var md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
-        //    var utf8 = new UTF8Encoding();
-        //    return BitConverter.ToString(md5.ComputeHash(utf8.GetBytes(parameters))).Replace("-", "");
-        //}
+        public static string[] FormatPath(string[] scriptPath)
+        {
+            for (var i = 0; i < scriptPath.Length; i++)
+                if (scriptPath[i].Contains(' '))
+                    scriptPath[i] = $"\"{scriptPath[i]}\"";
+            return scriptPath;
+        }
     }
 }
