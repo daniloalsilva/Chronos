@@ -13,12 +13,11 @@ namespace Chronos
 
         public static TimeManager LoadSingleConfiguration(TimeManager cachedScript)
         {
+            // create cache directory if it doesn't exists
             if (!Directory.Exists(cachedScript.CachePath))
-            {
                 Directory.CreateDirectory(cachedScript.CachePath);
-            }
 
-            ;
+            
             try
             {
                 using (var reader = new StreamReader(cachedScript.CacheFilePath))
@@ -100,7 +99,7 @@ namespace Chronos
                 {
                     // Diferenciando Scripts executados diretamente
                     ProcessStartInfo procStartInfo;
-                    if (timeManager.PluginExecutor == String.Empty)
+                    if (timeManager.PluginExecutor == string.Empty)
                         procStartInfo = new ProcessStartInfo(Tools.FormatPath(timeManager.ScriptPath),
                             timeManager.Parameters.Trim());
                     else
