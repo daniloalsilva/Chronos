@@ -1,28 +1,34 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Xml.Serialization;
 
 namespace Chronos
 {
     internal class ExecutionManager
     {
-        public ExecutionManager() { }
-
-        List<TimeManager> executionList;
+        public ExecutionManager()
+        {
+        }
 
         public static TimeManager LoadSingleConfiguration(TimeManager cachedScript)
         {
-            if (!Directory.Exists(cachedScript.CachePath)) { Directory.CreateDirectory(cachedScript.CachePath); };
+            if (!Directory.Exists(cachedScript.CachePath))
+            {
+                Directory.CreateDirectory(cachedScript.CachePath);
+            }
+
+            ;
             try
             {
-                using (StreamReader reader = new StreamReader(cachedScript.CacheFilePath))
-                {
-                    return JsonConvert.DeserializeObject<TimeManager>(reader.ReadToEnd());
-                }
+                using (var reader = new StreamReader(cachedScript.CacheFilePath))
+                    return (TimeManager) new XmlSerializer(typeof(TimeManager)).Deserialize(reader);
+                // return Json.Decode<TimeManager>(reader.ReadToEnd());
             }
-            catch (Exception) { return new TimeManager(); }
+            catch (Exception)
+            {
+                return new TimeManager();
+            }
         }
 
         /// <summary>
@@ -46,9 +52,15 @@ namespace Chronos
                 CachePath = Directory.GetCurrentDirectory() + @"\Cache\"
             };
 
-            for (int i = 3; i < args.Length; i++){ pluginRequest.Parameters += args[i] + " "; }
+            for (int i = 3; i < args.Length; i++)
+            {
+                pluginRequest.Parameters += args[i] + " ";
+            }
 
-            if (pluginRequest.Parameters == null) { pluginRequest.Parameters = String.Empty; }
+            if (pluginRequest.Parameters == null)
+            {
+                pluginRequest.Parameters = String.Empty;
+            }
 
             pluginRequest.UpdateCachePath();
 
@@ -56,25 +68,30 @@ namespace Chronos
             if (pluginRequest.CompareManagers(lastExecution))
             {
                 ExecutionResult result = StartExecution(pluginRequest);
-                
+
                 pluginRequest.LastExecutionResult = result.ResultContent;
                 pluginRequest.LastExitCode = result.ExitCode;
 
-                using (StreamWriter writer = new StreamWriter(pluginRequest.CacheFilePath))
-                {
-                    writer.Write(JsonConvert.SerializeObject(pluginRequest));
-                }
+                using (var writer = new StreamWriter(pluginRequest.CacheFilePath))
+                
+                    new XmlSerializer(typeof(TimeManager)).Serialize(writer, pluginRequest);
+                    //writer.Write(Json.Encode(pluginRequest));
+                
+
                 return result;
             }
-            else {
+            else
+            {
                 return new ExecutionResult(lastExecution.LastExitCode, lastExecution.LastExecutionResult);
             }
         }
 
         private static ExecutionResult StartExecution(TimeManager timeManager)
         {
-            timeManager.PluginExecutor = Executors.GetPluginExecutor(Path.GetExtension(timeManager.ScriptPath).ToLower());
-            timeManager.IntialParameters = Executors.GetIntialParameters(Path.GetExtension(timeManager.ScriptPath).ToLower());
+            timeManager.PluginExecutor =
+                Executors.GetPluginExecutor(Path.GetExtension(timeManager.ScriptPath)?.ToLower());
+            timeManager.IntialParameters =
+                Executors.GetIntialParameters(Path.GetExtension(timeManager.ScriptPath)?.ToLower());
 
             // Inicio da execução do processo
             using (Process proc = new Process())
@@ -84,14 +101,16 @@ namespace Chronos
                     // Diferenciando Scripts executados diretamente
                     ProcessStartInfo procStartInfo;
                     if (timeManager.PluginExecutor == String.Empty)
-                        procStartInfo = new ProcessStartInfo(Tools.FormatPath(timeManager.ScriptPath), timeManager.Parameters.Trim());
+                        procStartInfo = new ProcessStartInfo(Tools.FormatPath(timeManager.ScriptPath),
+                            timeManager.Parameters.Trim());
                     else
                         procStartInfo = new ProcessStartInfo(
                             Tools.FormatPath(timeManager.PluginExecutor),
-                            timeManager.IntialParameters + Tools.FormatPath(timeManager.ScriptPath) + " " + timeManager.Parameters.Trim());
+                            timeManager.IntialParameters + Tools.FormatPath(timeManager.ScriptPath) + " " +
+                            timeManager.Parameters.Trim());
 
-                    /// Os comandos abaixo não necessários para redirecionar a saída dos Scripts
-                    /// As mesmas serão redirecionadas para o StreamReader Process.StandardOutput
+                    // Os comandos abaixo não necessários para redirecionar a saída dos Scripts
+                    // As mesmas serão redirecionadas para o StreamReader Process.StandardOutput
                     procStartInfo.RedirectStandardOutput = true;
                     procStartInfo.UseShellExecute = false;
 

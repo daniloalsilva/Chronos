@@ -8,7 +8,6 @@
         }
 
         public int ExitCode { get; private set; }
-
         public string ResultContent { get; private set; }
     }
 }

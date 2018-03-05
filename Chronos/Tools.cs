@@ -6,7 +6,7 @@ namespace Chronos
 {
     class Tools
     {
-        public static void Help()
+        private static void Help()
         {
             Console.WriteLine(@"
  ┌─┐┬ ┬┬─┐┌─┐┌┐┌┌┬┐┌─┐
@@ -52,7 +52,7 @@ namespace Chronos
 ");
         }
 
-        public static void ClearCache()
+        private static void ClearCache()
         {
             string[] dir = Directory.GetFiles(Directory.GetCurrentDirectory() + @"\Cache\");
             foreach (string item in dir)

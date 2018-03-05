@@ -3,7 +3,7 @@ using System.Text;
 
 namespace Chronos
 {
-    class TimeManager
+    public class TimeManager
     {
 
         #region Variables
