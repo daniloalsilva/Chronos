@@ -1,120 +1,55 @@
 ﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Chronos
 {
-    class TimeManager
+    public class TimeManager
     {
 
         #region Variables
         /// <summary>
         /// Script Path from plugin
         /// </summary>
-        private string scriptPath { get; set; }
-        public string ScriptPath
-        {
-            get { return scriptPath; }
-            set { scriptPath = value; }
-        }
+        public string ScriptPath { get; set; }
 
         /// <summary>
         /// Time to keep the cache from executed plugin
         /// </summary>
-        private int cacheTime;
-        public int CacheTime
-        {
-            get { return cacheTime; }
-            set { cacheTime = value; }
-        }
+        public int CacheTime { get; set; }
 
-        private string cachePath;
-        public string CachePath
-        {
-            get { return cachePath; }
-            set { cachePath = value; }
-        }
+        public string CachePath { get; set; }
 
-        private string cacheFilePath;
-        public string CacheFilePath
-        {
-            get { return cacheFilePath; }
-            set { cacheFilePath = value; }
-        }
+        public string CacheFilePath { get; set; }
 
         /// <summary>
         /// Get the last execution time from plugin described on TimeManager scriptPath
         /// </summary>
-        private DateTime lastExecutionTime;
-        public DateTime LastExecutionTime
-        {
-            get { return lastExecutionTime; }
-            set { lastExecutionTime = value; }
-        }
-        
+        public DateTime LastExecutionTime { get; set; }
+
+
         /// <summary>
         /// Last result from plugin execution, keeped in cache
         /// </summary>
-        private string lastExecutionResult;
-        public string LastExecutionResult
-        {
-            get { return lastExecutionResult; }
-            set { lastExecutionResult = value; }
-        }
-        
+        public string LastExecutionResult { get; set; }
+
+
         /// <summary>
         /// Timeout form 
         /// </summary>
-        private int timeout;
-        public int Timeout
-        {
-            get { return timeout; }
-            set { timeout = value; }
-        }
+        public int Timeout { get; set; }
 
-        private string parameters;
-        public string Parameters
-        {
-            get { return parameters; }
-            set { parameters = value; }
-        }
+        public string Parameters { get; set; }
 
-        private string name;
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
+        public string Name { get; set; }
 
-        private string pluginExecutor;
-        public string PluginExecutor
-        {
-            get { return pluginExecutor; }
-            set { pluginExecutor = value; }
-        }
+        public string PluginExecutor { get; set; }
 
-        private string intialParameters;
-        public string IntialParameters
-        {
-            get { return intialParameters; }
-            set { intialParameters = value; }
-        }
+        public string IntialParameters { get; set; }
 
-        private int lastExitCode;
-        public int LastExitCode
-        {
-            get { return lastExitCode; }
-            set { lastExitCode = value; }
-        }
+        public int LastExitCode { get; set; }
 
         #endregion
 
-        public TimeManager() { 
-            
-        }
-        
         /// <summary>
         /// Compare current object TimeManager with TimeManager used in parameters.
         /// </summary>
